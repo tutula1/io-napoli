@@ -1,8 +1,7 @@
 {
   "name": "ionic-coffee-napoli",
   "integrations": {
-    "cordova": {},
-    "capacitor": {}
+    "cordova": {}
   },
   "type": "angular",
   "id": "250f9661"
