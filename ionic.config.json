@@ -1,8 +1,7 @@
 {
-  "name": "ionic-coffee-napoli",
+  "name": "ionic4-firebase-crud",
   "integrations": {
     "cordova": {}
   },
-  "type": "angular",
-  "id": "250f9661"
+  "type": "angular"
 }
