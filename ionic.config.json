@@ -1,0 +1,8 @@
+{
+  "name": "ionic4-firebase-crud",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular",
+  "id": "7a70c9fc"
+}
