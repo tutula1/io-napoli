@@ -44,9 +44,14 @@ export class LoginPage implements OnInit {
   }
 
   tryLogin(value){
+    this.errorMessage = "";
     this.authService.doLogin(value)
     .then(res => {
+      if(res){
       this.router.navigate(["/home"]);
+      } else {
+        this.errorMessage = "Error !!!";
+      }
     }, err => {
       this.errorMessage = err.message;
       console.log(err)
