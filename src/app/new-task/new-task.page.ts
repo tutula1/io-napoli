@@ -42,6 +42,7 @@ export class NewTaskPage implements OnInit {
   onSubmit(value){
     let data = {
       title: value.title,
+      active: true,
       description: value.description,
       image: this.image
     }

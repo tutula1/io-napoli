@@ -3,6 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import 'firebase/storage';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { LoadingController, ToastController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +11,37 @@ import { AngularFireAuth } from '@angular/fire/auth';
 export class UtilsService {
 
   private snapshotChangesSubscription: any;
-
+  private loading: any;
   constructor(
     public afs: AngularFirestore,
-    public afAuth: AngularFireAuth
-  ){}
+    public afAuth: AngularFireAuth,
+    public loadingCtrl: LoadingController,
+    public toastCtrl: ToastController,
+  ){
+    this.init();
+  }
+
+  async init(){
+    this.loading = await this.loadingCtrl.create({
+      message: 'Please wait...'
+    });
+  }
+
+  async presentToast(message='', duration=3000) {
+    const toast = await this.toastCtrl.create({
+      message: message,
+      duration: duration
+    });
+    toast.present();
+  }
+  
+  async presentLoading() {
+    return await this.loading.present();
+  }
+
+  async dismissLoading() {
+    return await this.loading.dismiss();
+  }
 
   encodeImageUri(imageUri, callback) {
     var c = document.createElement('canvas');
@@ -31,10 +58,10 @@ export class UtilsService {
     img.src = imageUri;
   };
 
-  uploadImage(imageURI, name, randomId){
+  uploadImage(imageURI, name, id){
     return new Promise<any>((resolve, reject) => {
       let storageRef = firebase.storage().ref();
-      let imageRef = storageRef.child(name).child(randomId);
+      let imageRef = storageRef.child(name).child(id);
       this.encodeImageUri(imageURI, function(image64){
         imageRef.putString(image64, 'data_url')
         .then(snapshot => {
@@ -47,11 +74,11 @@ export class UtilsService {
     })
   }
 
-  deleteImage(name, randomId){
+  deleteImage(name, id){
     return new Promise<any>((resolve, reject) => {
         try {
             let storageRef = firebase.storage().ref();
-            storageRef.child(name).child(randomId).delete();
+            storageRef.child(name).child(id).delete();
             resolve();
         } catch(err) {
             reject(err);

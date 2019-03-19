@@ -1,19 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule} from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { HomePage } from './home.page';
-import { HomeResolver } from './home.resolver';
+import { TableDetailPage } from './table-detail.page';
+import { TableDetailResolver } from './table-detail.resolver';
 
 const routes: Routes = [
   {
     path: '',
-    component: HomePage,
+    component: TableDetailPage,
     resolve: {
-      data: HomeResolver
+      data: TableDetailResolver
     }
   }
 ];
@@ -22,13 +22,11 @@ const routes: Routes = [
   imports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule,
     IonicModule,
+    ReactiveFormsModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [HomePage],
-  providers: [
-    HomeResolver
-  ]
+  declarations: [TableDetailPage],
+  providers:[TableDetailResolver]
 })
-export class HomePageModule {}
+export class TableDetailPageModule {}

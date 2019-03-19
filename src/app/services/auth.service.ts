@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import * as firebase from "firebase/app";
 import { AngularFirestore } from "@angular/fire/firestore";
-import { FirebaseService } from "./firebase.service";
+import { TableService } from "./table.service";
 import { AngularFireAuth } from "@angular/fire/auth";
 
 @Injectable({
@@ -13,7 +13,7 @@ export class AuthService {
 
   constructor(
     public afs: AngularFirestore,
-    private firebaseService: FirebaseService,
+    private tableService: TableService,
     public afAuth: AngularFireAuth,
   ) {
     this.name = "users";
@@ -31,16 +31,19 @@ export class AuthService {
               .auth()
               .currentUser.updateProfile({
                 displayName: value.name,
+                photoURL: '../assets/imgs/default_image.png'
               })
               .then(
                 (res) => {
                   this.collection
-                    .doc(value.email)
+                    .doc(firebase.auth().currentUser.uid)
                     .set({
                       email: value.email,
                       name: value.name,
-                      role: 10,
-                      active: false,
+                      photoURL: '../assets/imgs/default_image.png',
+                      role: value.email == "admin@napoli.coffee" ? 1 : 10,
+                      active:
+                        value.email == "admin@napoli.coffee" ? true : false,
                       timestamp: new Date(),
                     })
                     .then((res) => resolve(user), (err) => reject(err));
@@ -62,28 +65,21 @@ export class AuthService {
         .signInWithEmailAndPassword(value.email, value.password)
         .then(
           (user) => {
-            if (
-              firebase.auth().currentUser &&
-              firebase.auth().currentUser.providerData.length > 0
-            ) {
-              this.collection
-                .doc(firebase.auth().currentUser.providerData[0].email)
-                .get()
-                .subscribe(
-                  (user) => {
-                    if (user.data().active) {
-                      resolve(true);
-                    } else {
-                      resolve(false);
-                    }
-                  },
-                  (err) => {
+            this.collection
+              .doc(firebase.auth().currentUser.uid)
+              .get()
+              .subscribe(
+                (user) => {
+                  if (user.data().active) {
+                    resolve(true);
+                  } else {
                     resolve(false);
-                  },
-                );
-            } else {
-              resolve(false);
-            }
+                  }
+                },
+                (err) => {
+                  resolve(false);
+                },
+              );
           },
           (err) => reject(err),
         );
@@ -92,16 +88,20 @@ export class AuthService {
 
   doLogout() {
     return new Promise((resolve, reject) => {
-      this.afAuth.auth
-        .signOut()
-        .then(() => {
-          this.firebaseService.unsubscribeOnLogOut();
-          resolve();
-        })
-        .catch((error) => {
-          console.log(error);
-          reject();
-        });
+      if (firebase.auth().currentUser) {
+        this.afAuth.auth
+          .signOut()
+          .then(() => {
+            this.tableService.unsubscribeOnLogOut();
+            resolve();
+          })
+          .catch((error) => {
+            console.log(error);
+            reject();
+          });
+      } else {
+        resolve();
+      }
     });
   }
 }

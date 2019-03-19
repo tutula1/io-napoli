@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="tables"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ "Thêm bàn mới" }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <form [formGroup]="validations_form" (ngSubmit)="onSubmit(validations_form.value)">
+    <ion-item>
+      <ion-label position="floating" color="primary">{{ "Tên" }}</ion-label>
+      <ion-input type="text" formControlName="name"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating" color="primary">{{ "Mô tả" }}</ion-label>
+      <ion-textarea formControlName="description"></ion-textarea>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating" color="primary">{{ "Thứ tự" }}</ion-label>
+      <ion-input type="number" formControlName="sequence"></ion-input>
+    </ion-item>
+    <ion-button class="submit-btn" expand="block" type="submit" [disabled]="!validations_form.valid">{{ "Tạo" }}</ion-button>
+  </form>
+</ion-content>

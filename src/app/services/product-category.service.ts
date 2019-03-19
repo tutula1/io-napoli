@@ -8,13 +8,13 @@ import { UtilsService } from "./utils.service";
 @Injectable({
   providedIn: "root",
 })
-export class TableService {
+export class ProductCategoryService {
   private snapshotChangesSubscription: any;
   private name: any;
   private collection: any;
 
   constructor(public afs: AngularFirestore, public afAuth: AngularFireAuth, public utilsService:  UtilsService) {
-    this.name = "tables";
+    this.name = "product-categories";
     this.collection = this.afs.collection(this.name);
   }
 
@@ -26,7 +26,7 @@ export class TableService {
     return this.collection;
   }
 
-  getTables() {
+  getProductCategories() {
     return new Promise<any>((resolve, reject) => {
       try {
         this.snapshotChangesSubscription = this.collection.snapshotChanges();
@@ -37,10 +37,10 @@ export class TableService {
     });
   }
 
-  getTable(tableId) {
+  getProductCategory(productCategoryId) {
     return new Promise<any>((resolve, reject) => {
       this.snapshotChangesSubscription = this.afs
-        .doc(this.name + "/" + tableId)
+        .doc(this.name + "/" + productCategoryId)
         .valueChanges()
         .subscribe(
           (snapshots) => {
@@ -60,30 +60,30 @@ export class TableService {
     }
   }
 
-  updateTable(tableKey, value) {
+  updateProductCategory(productCategoryKey, value) {
     return new Promise<any>((resolve, reject) => {
       this.collection
-        .doc(tableKey)
+        .doc(productCategoryKey)
         .set(value)
         .then((res) => resolve(res), (err) => reject(err));
     });
   }
 
-  deleteTable(tableKey) {
+  deleteProductCategory(productCategoryKey) {
     return new Promise<any>((resolve, reject) => {
       try{
-        this.utilsService.deleteImage(this.name, tableKey);
+        this.utilsService.deleteImage(this.name, productCategoryKey);
       } catch(err){
         console.log(err);
       };
       this.collection
-        .doc(tableKey)
+        .doc(productCategoryKey)
         .delete()
         .then((res) => resolve(res), (err) => reject(err));
     });
   }
 
-  createTable(value) {
+  createProductCategory(value) {
     value.timestamp = new Date();
     return new Promise<any>((resolve, reject) => {
       this.collection

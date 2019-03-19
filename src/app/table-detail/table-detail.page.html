@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="tables"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ "Cập nhật" }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <div>
+    <ion-row>
+      <ion-col size="6" offset="3">
+        <img [src]="image" alt="this is the image" />
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6" offset="3">
+        <ion-button
+          fill="outline"
+          expand="block"
+          size="small"
+          (click)="openImagePicker()"
+          >{{ "Cập nhật hình ảnh" }}</ion-button
+        >
+      </ion-col>
+    </ion-row>
+  </div>
+  <form
+    [formGroup]="validations_form"
+    (ngSubmit)="onSubmit(validations_form.value)"
+  >
+    <ion-item>
+      <ion-label position="floating" color="primary">{{ "Tên" }}</ion-label>
+      <ion-input type="text" formControlName="name"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating" color="primary">{{ "Mô tả" }}</ion-label>
+      <ion-textarea formControlName="description"></ion-textarea>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating" color="primary">{{ "Thứ tự" }}</ion-label>
+      <ion-input type="number" formControlName="sequence"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label color="primary">{{ "Hoạt động" }}</ion-label>
+      <ion-toggle formControlName="active"></ion-toggle>
+    </ion-item>
+    <ion-button
+      class="submit-button"
+      expand="block"
+      type="submit"
+      [disabled]="!validations_form.valid"
+      >{{ "Lưu" }}</ion-button
+    >
+  </form>
+  <ion-button
+    class="delete-button"
+    expand="block"
+    color="danger"
+    (click)="delete()"
+    >{{ "Xoá" }}</ion-button
+  >
+</ion-content>
